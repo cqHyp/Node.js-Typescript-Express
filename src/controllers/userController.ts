@@ -9,8 +9,9 @@ class UserController {
         User.find({}, (err, allInfo) => {
             if (err) {
                 next(new HttpException(500, -1, "系统错误"));
+            }else {
+                res.send(new HttpException(200, 0, "调用成功", allInfo));
             }
-            res.send(new HttpSuccess(0, "调用成功", allInfo));
         })
     }
 
@@ -18,8 +19,9 @@ class UserController {
         User.findById(req.query.id, (err, allInfo) => {
             if (err) {
                 next(new HttpException(500, -1, "系统错误"));
+            } else {
+                res.send(new HttpException(200, 0, "调用成功", allInfo));
             }
-            res.send(new HttpSuccess(0, "调用成功", allInfo));
         })
     }
 
@@ -27,9 +29,10 @@ class UserController {
         let newUser = new User(req.body);
         newUser.save((err, info) => {
             if (err) {
-                next(new HttpException(500, -1, "系统错误"));
+                next(new HttpException(500, -1, err));
+            }else {
+                res.send(new HttpException(200, 0, "调用成功", info));
             }
-            res.send(new HttpSuccess(0, "调用成功", info));
         })
     }
 
@@ -37,8 +40,9 @@ class UserController {
         User.findByIdAndUpdate({ _id: req.query.id, }, req.body, (err, result) => {
             if (err) {
                 next(new HttpException(500, -1, "系统错误"));
+            }else {
+                res.send(new HttpException(200, 0, "调用成功", result));
             }
-            res.send(new HttpSuccess(0, "调用成功", result));
         })
     }
 
@@ -46,8 +50,9 @@ class UserController {
         User.remove({ _id: req.query.id }, (err) => {
             if (err) {
                 next(new HttpException(500, -1, "系统错误"));
+            }else {
+                res.send(new HttpException(200, 0, "调用成功", null))
             }
-            res.send(new HttpSuccess(0, "调用成功", null))
         })
     }
 }

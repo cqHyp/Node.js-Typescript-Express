@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_model_1 = require("../models/user.model");
 const HttpException_1 = require("../exceptions/HttpException");
-const HttpSuccess_1 = require("../exceptions/HttpSuccess");
 let UserController = (() => {
     class UserController {
     }
@@ -20,7 +19,9 @@ let UserController = (() => {
             if (err) {
                 next(new HttpException_1.default(500, -1, "系统错误"));
             }
-            res.send(new HttpSuccess_1.default(0, "调用成功", allInfo));
+            else {
+                res.send(new HttpException_1.default(200, 0, "调用成功", allInfo));
+            }
         });
     });
     UserController.getOneById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -28,16 +29,20 @@ let UserController = (() => {
             if (err) {
                 next(new HttpException_1.default(500, -1, "系统错误"));
             }
-            res.send(new HttpSuccess_1.default(0, "调用成功", allInfo));
+            else {
+                res.send(new HttpException_1.default(200, 0, "调用成功", allInfo));
+            }
         });
     });
     UserController.newUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         let newUser = new user_model_1.default(req.body);
         newUser.save((err, info) => {
             if (err) {
-                next(new HttpException_1.default(500, -1, "系统错误"));
+                next(new HttpException_1.default(500, -1, err));
             }
-            res.send(new HttpSuccess_1.default(0, "调用成功", info));
+            else {
+                res.send(new HttpException_1.default(200, 0, "调用成功", info));
+            }
         });
     });
     UserController.editUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -45,7 +50,9 @@ let UserController = (() => {
             if (err) {
                 next(new HttpException_1.default(500, -1, "系统错误"));
             }
-            res.send(new HttpSuccess_1.default(0, "调用成功", result));
+            else {
+                res.send(new HttpException_1.default(200, 0, "调用成功", result));
+            }
         });
     });
     UserController.delUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -53,7 +60,9 @@ let UserController = (() => {
             if (err) {
                 next(new HttpException_1.default(500, -1, "系统错误"));
             }
-            res.send(new HttpSuccess_1.default(0, "调用成功", null));
+            else {
+                res.send(new HttpException_1.default(200, 0, "调用成功", null));
+            }
         });
     });
     return UserController;

@@ -1,14 +1,50 @@
 import * as mongoose from "mongoose";
+import * as bcrypt from "bcrypt";
 
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    firstName: {
-        type: String,
-        required: true
+    openid: {
+        type: String
     },
 
-    lastName: {
+    unionid: {
+        type: String
+    },
+
+    name: {
+        type: String
+    },
+
+    nickName: {
+        type: String
+    },
+
+    gender: {
+        type: Number
+    },
+
+    language: {
+        type: String
+    },
+
+    city: {
+        type: String
+    },
+
+    province: {
+        type: String
+    },
+
+    country: {
+        type: String
+    },
+
+    avatarUrl: {
+        type: String
+    },
+
+    password: {
         type: String,
         required: true
     },
@@ -28,15 +64,59 @@ const userSchema = new Schema({
         type: String
     },
 
-    phone: {
+    mobile: {
         type: Number
+    },
+
+    address: {
+        type: String
+    },
+
+    token: {
+        type: String
+    },
+
+    session_key: {
+        type: String
+    },
+
+    session_key_updated_date: {
+        type: Date
     },
 
     created_date: {
         type: Date,
         default: Date.now
+    },
+
+    changed_date: {
+        type: Date
     }
 })
+
+userSchema.pre("save", function (next) {
+    let v: any = this;
+    if (!this.isModified('password')) {
+        return next()
+    }
+    bcrypt.hash(v.password, 8, (err, hash) => {
+        if (err) {
+            return next(err)
+        }
+        v.password = hash;
+        return next();
+    })
+})
+
+userSchema.methods.checkPassword = function (password: string) {
+    const passwordHash = this.password;
+    return new Promise((resovle, reject) => {
+        bcrypt.compare(password, passwordHash, (err, same) => {
+            if (err) return reject(err)
+            return resovle(same)
+        })
+    })
+}
 
 const User = mongoose.model('user', userSchema)
 
