@@ -7,6 +7,7 @@ const logger = require("morgan");
 const cors = require("cors");
 const index_1 = require("./routes/index");
 const mongoose = require("mongoose");
+const mysql = require("mysql");
 const config_1 = require("./config");
 const error_middleware_1 = require("./middleware/error.middleware");
 const success_middleware_1 = require("./middleware/success.middleware");
@@ -16,7 +17,6 @@ class Server {
         this.config();
         this.routes();
         this.api();
-        this.setMongoConfig();
         this.initializeErrorHandling();
         this.initializeSuccessHandling();
     }
@@ -38,6 +38,14 @@ class Server {
         mongoose.connect(config_1.DB_URL, {
             useUnifiedTopology: true,
             useNewUrlParser: true
+        });
+    }
+    setMysqlConfig() {
+        const db = mysql.createConnection(config_1.mysql_config);
+        db.connect((err) => {
+            if (err)
+                throw err;
+            console.log("数据库连接成功");
         });
     }
     initializeErrorHandling() {

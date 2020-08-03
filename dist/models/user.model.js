@@ -1,16 +1,40 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = require("mongoose");
+const mysql = require("mysql");
 const bcrypt = require("bcrypt");
 const Schema = mongoose.Schema;
+const Mchema = mysql.Schema;
 const userSchema = new Schema({
-    firstName: {
-        type: String,
-        required: true
+    openid: {
+        type: String
     },
-    lastName: {
-        type: String,
-        required: true
+    unionid: {
+        type: String
+    },
+    name: {
+        type: String
+    },
+    nickName: {
+        type: String
+    },
+    gender: {
+        type: Number
+    },
+    language: {
+        type: String
+    },
+    city: {
+        type: String
+    },
+    province: {
+        type: String
+    },
+    country: {
+        type: String
+    },
+    avatarUrl: {
+        type: String
     },
     password: {
         type: String,
@@ -28,12 +52,27 @@ const userSchema = new Schema({
     company: {
         type: String
     },
-    phone: {
+    mobile: {
         type: Number
+    },
+    address: {
+        type: String
+    },
+    token: {
+        type: String
+    },
+    session_key: {
+        type: String
+    },
+    session_key_updated_date: {
+        type: Date
     },
     created_date: {
         type: Date,
         default: Date.now
+    },
+    changed_date: {
+        type: Date
     }
 });
 userSchema.pre("save", function (next) {

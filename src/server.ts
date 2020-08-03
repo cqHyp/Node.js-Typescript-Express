@@ -8,7 +8,8 @@ import errorHandler = require("errorhandler");
 import methodOverride = require("method-override");
 import routes from "./routes/index";
 import * as mongoose from "mongoose";
-import { DB_URL } from "./config";
+import * as mysql from "mysql";
+import { DB_URL, mysql_config } from "./config";
 import errorMiddleware from "./middleware/error.middleware";
 import successMiddleware from "./middleware/success.middleware";
 
@@ -51,7 +52,8 @@ export class Server {
         // add api
         this.api();
 
-        this.setMongoConfig();
+        // this.setMongoConfig();
+        // this.setMysqlConfig();
 
         this.initializeErrorHandling();
 
@@ -80,9 +82,9 @@ export class Server {
         //支持  application/json类型 发送数据
         this.app.use(body.json());
         //支持 application/x-www-form-urlencoded 发送数据
-        this.app.use(body.urlencoded({ extended: false }))
+        this.app.use(body.urlencoded({ extended: false }));
         //日志中间件
-        this.app.use(logger('dev'))
+        this.app.use(logger('dev'));
     }
 
     /**
@@ -103,6 +105,14 @@ export class Server {
             useUnifiedTopology: true,
             useNewUrlParser: true
         });
+    }
+
+    public setMysqlConfig() {
+        const db = mysql.createConnection(mysql_config);
+        db.connect((err) => {
+            if (err) throw err;
+            console.log("数据库连接成功");
+        })
     }
 
     public initializeErrorHandling() {

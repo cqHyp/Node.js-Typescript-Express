@@ -1,7 +1,10 @@
 import * as mongoose from "mongoose";
+import * as mysql from "mysql";
 import * as bcrypt from "bcrypt";
 
 const Schema = mongoose.Schema;
+const Mchema = mysql.Schema;
+
 
 const userSchema = new Schema({
     openid: {
@@ -119,5 +122,6 @@ userSchema.methods.checkPassword = function (password: string) {
 }
 
 const User = mongoose.model('user', userSchema)
+// const User = mysql.model("user", userSchema);
 
 export default User

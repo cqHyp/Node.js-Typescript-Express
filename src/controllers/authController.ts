@@ -3,7 +3,7 @@ import User from '../models/user.model';
 import HttpException from '../exceptions/HttpException';
 import axios from "axios";
 import { appId, secret } from "../config/index";
-import WXBizDataCrypt from "../utils/WXBizDataCrypt";
+// import WXBizDataCrypt from "../utils/WXBizDataCrypt";
 
 class AuthController {
     /**
@@ -79,7 +79,7 @@ class AuthController {
                 }
             });
             if (response.data.errcode == 0) {
-
+                
             } else {
                 next(new HttpException(500, response.data.errcode, response.data.errmsg));
             }
@@ -102,11 +102,11 @@ class AuthController {
             return next(new HttpException(400, -1, "iv not set"));
         }
         try {
-            const user: any = await User.findOne({ token: req.body.token });
-            let decryData = new WXBizDataCrypt(appId, user.session_key).decryptData(req.body.encryptedData, req.body.iv);
-            User.findOneAndUpdate({ _id: user._id }, {}, (err, result) => {
+            // const user: any = await User.findOne({ token: req.body.token });
+            // let decryData = new WXBizDataCrypt(appId, user.session_key).decryptData(req.body.encryptedData, req.body.iv);
+            // User.findOneAndUpdate({ _id: user._id }, {}, (err, result) => {
                 
-            })
+            // })
         } catch (err) {
 
         }

@@ -11,26 +11,36 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_model_1 = require("../models/user.model");
 const HttpException_1 = require("../exceptions/HttpException");
+const db = require("../sql/dbConfig");
 let UserController = (() => {
     class UserController {
     }
     UserController.listAll = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        user_model_1.default.find({}, (err, allInfo) => {
-            if (err) {
-                next(new HttpException_1.default(500, -1, "系统错误"));
+        let sql = 'select * from user';
+        let data = [];
+        db.base(sql, data, (result) => {
+            if (result) {
+                res.send(new HttpException_1.default(200, 0, "调用成功", result));
             }
             else {
-                res.send(new HttpException_1.default(200, 0, "调用成功", allInfo));
+                next(new HttpException_1.default(500, -1, "系统错误"));
             }
         });
     });
     UserController.getOneById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        user_model_1.default.findById(req.query.id, (err, allInfo) => {
-            if (err) {
-                next(new HttpException_1.default(500, -1, "系统错误"));
+        let sql = 'select * from user where id = ?';
+        let data = [req.query.id];
+        db.base(sql, data, (result) => {
+            if (result) {
+                if (result.length > 0) {
+                    res.send(new HttpException_1.default(200, 0, "调用成功", result[0]));
+                }
+                else {
+                    next(new HttpException_1.default(500, -1, "用户不存在"));
+                }
             }
             else {
-                res.send(new HttpException_1.default(200, 0, "调用成功", allInfo));
+                next(new HttpException_1.default(500, -1, "系统错误"));
             }
         });
     });
