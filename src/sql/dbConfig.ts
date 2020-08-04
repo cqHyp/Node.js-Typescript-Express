@@ -1,7 +1,5 @@
-import * as mysql from "mysql";
 import { mysql_config } from "../config";
 import { Sequelize } from "sequelize";
-import { connection } from "mongoose";
 
 const sequelize = new Sequelize(
     mysql_config.database,

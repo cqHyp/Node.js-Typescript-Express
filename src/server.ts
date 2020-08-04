@@ -1,17 +1,12 @@
 import * as body from "body-parser";
-import * as cookieParser from "cookie-parser";
 import * as express from "express";
 import * as logger from "morgan";
 import * as cors from "cors";
-import * as path from "path";
-import errorHandler = require("errorhandler");
-import methodOverride = require("method-override");
 import routes from "./routes/index";
-import * as mongoose from "mongoose";
-import * as mysql from "mysql";
-import { DB_URL, mysql_config } from "./config";
 import errorMiddleware from "./middleware/error.middleware";
 import successMiddleware from "./middleware/success.middleware";
+import Product from "./models/productEntity";
+import Category from "./models/categoryEntity";
 
 /**
  * The Server 
@@ -52,8 +47,7 @@ export class Server {
         // add api
         this.api();
 
-        // this.setMongoConfig();
-        // this.setMysqlConfig();
+        this.initSqlConfig();
 
         this.initializeErrorHandling();
 
@@ -98,21 +92,11 @@ export class Server {
     }
 
     /**
-     * mongo config
+     * 表关联
      */
-    public setMongoConfig() {
-        mongoose.connect(DB_URL, {
-            useUnifiedTopology: true,
-            useNewUrlParser: true
-        });
-    }
-
-    public setMysqlConfig() {
-        const db = mysql.createConnection(mysql_config);
-        db.connect((err) => {
-            if (err) throw err;
-            console.log("数据库连接成功");
-        })
+    public initSqlConfig() {
+        Category.hasMany(Product, { as: "Category", foreignKey: "category", sourceKey: "id" });
+        Product.belongsTo(Category, { as: "Category", foreignKey: "category", targetKey: "id" });
     }
 
     public initializeErrorHandling() {

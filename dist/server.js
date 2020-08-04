@@ -6,17 +6,17 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const index_1 = require("./routes/index");
-const mongoose = require("mongoose");
-const mysql = require("mysql");
-const config_1 = require("./config");
 const error_middleware_1 = require("./middleware/error.middleware");
 const success_middleware_1 = require("./middleware/success.middleware");
+const productEntity_1 = require("./models/productEntity");
+const categoryEntity_1 = require("./models/categoryEntity");
 class Server {
     constructor() {
         this.app = express();
         this.config();
         this.routes();
         this.api();
+        this.initSqlConfig();
         this.initializeErrorHandling();
         this.initializeSuccessHandling();
     }
@@ -34,19 +34,9 @@ class Server {
     routes() {
         this.app.use(index_1.default);
     }
-    setMongoConfig() {
-        mongoose.connect(config_1.DB_URL, {
-            useUnifiedTopology: true,
-            useNewUrlParser: true
-        });
-    }
-    setMysqlConfig() {
-        const db = mysql.createConnection(config_1.mysql_config);
-        db.connect((err) => {
-            if (err)
-                throw err;
-            console.log("数据库连接成功");
-        });
+    initSqlConfig() {
+        categoryEntity_1.default.hasMany(productEntity_1.default, { as: "Category", foreignKey: "category", sourceKey: "id" });
+        productEntity_1.default.belongsTo(categoryEntity_1.default, { as: "Category", foreignKey: "category", targetKey: "id" });
     }
     initializeErrorHandling() {
         this.app.use(error_middleware_1.default);
