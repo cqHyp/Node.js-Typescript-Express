@@ -1,18 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const mysql = require("mysql");
 const config_1 = require("../config");
-exports.base = (sql, data, callback) => {
-    const db = mysql.createConnection(config_1.mysql_config);
-    db.connect((err) => {
-        if (err)
-            throw err;
-        console.log("数据库连接成功");
-    });
-    db.query(sql, data, (error, results, fields) => {
-        if (error)
-            throw error;
-        callback(results);
-    });
-    db.end();
-};
+const sequelize_1 = require("sequelize");
+const sequelize = new sequelize_1.Sequelize(config_1.mysql_config.database, config_1.mysql_config.user, config_1.mysql_config.password, {
+    host: config_1.mysql_config.host,
+    dialect: 'mysql',
+    pool: {
+        max: 5,
+        min: 0,
+        idle: 30000
+    }
+});
+sequelize.authenticate().then(() => {
+    console.log('Connection successfully.');
+}).catch(err => {
+    console.error('Unable to connect to the database:', err);
+});
+exports.default = sequelize;

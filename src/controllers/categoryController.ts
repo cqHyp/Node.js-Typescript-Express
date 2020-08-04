@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from "express";
-import User from "../models/userEntity"
 import HttpException from "../exceptions/HttpException";
+import Category from "../models/categoryEntity"
 
-class UserController {
+class CategoryController{
 
     /**
-     * 获取所有用户列表
+     * 获取所有分类列表
      */
-    static listAll = async (req: Request, res: Response, next: NextFunction) => {
-        User.findAll().then(result => {
+    static getCategoryList = async (req: Request, res: Response, next: NextFunction) => {
+        Category.findAll().then(result => {
             res.send(new HttpException(200, 0, "调用成功", result));
         }).catch(error => {
             next(new HttpException(500, -1, error));
@@ -16,13 +16,13 @@ class UserController {
     }
 
     /**
-     * 根据id获取用户详情
+     * 根据id获取分类
      */
-    static getOneById = async (req: Request, res: Response, next: NextFunction) => {
+    static getCategoryById = async (req: Request, res: Response, next: NextFunction) => {
         if (!req.query.id) {
-            return next(new HttpException(500, -1, "用户id不能为空！"));
+            return next(new HttpException(500, -1, "id不能为空！"));
         }
-        User.findOne({
+        Category.findOne({
             where: {
                 id: req.query.id
             }
@@ -30,36 +30,32 @@ class UserController {
             if (result) {
                 res.send(new HttpException(200, 0, "调用成功", result));
             } else {
-                next(new HttpException(500, -1, "用户不存在"));
+                next(new HttpException(500, -1, "分类不存在"));
             }
         }).catch(error => {
             next(new HttpException(500, -1, error));
-        })
+        });
     }
 
     /**
-     * 创建用户
+     * 新增分类
      */
-    static createUser = async (req: Request, res: Response, next: NextFunction) => {
-        User.create({
-            openid: req.query.openid,
-            status: 1
-        }).then(result => {
-            res.send(new HttpException(200, 0, "调用成功", result));
+    static createCategory = async (req: Request, res: Response, next: NextFunction) => {
+        Category.create(req.query).then(result => {
+            res.send(new HttpException(200, 0, "新增成功", result));
         }).catch(error => {
             next(new HttpException(500, -1, error));
         })
     }
 
     /**
-     * 更新用户信息
-     * id required: true
+     * 更新分类
      */
-    static updateUser = async (req: Request, res: Response, next: NextFunction) => {
+    static updateCategory = async (req: Request, res: Response, next: NextFunction) => {
         if (!req.query.id) {
-            return next(new HttpException(500, -1, "用户id不能为空！"));
+            return next(new HttpException(500, -1, "id不能为空！"));
         }
-        User.update(req.query, {
+        Category.update(req.query, {
             where: {
                 id: req.query.id
             }
@@ -67,7 +63,7 @@ class UserController {
             if (result[0]) {
                 res.send(new HttpException(200, 0, "修改成功", null));
             } else {
-                next(new HttpException(500, -1, "未找到用户"));
+                next(new HttpException(500, -1, "分类不存在"));
             }
         }).catch(error => {
             next(new HttpException(500, -1, error));
@@ -75,14 +71,13 @@ class UserController {
     }
 
     /**
-     * 删除用户
-     * id required: true
+     * 删除分类
      */
-    static deleteUser = async (req: Request, res: Response, next: NextFunction) => {
+    static deleteCategory = async (req: Request, res: Response, next: NextFunction) => {
         if (!req.query.id) {
-            return next(new HttpException(500, -1, "用户id不能为空！"));
+            return next(new HttpException(500, -1, "id不能为空！"));
         }
-        User.destroy({
+        Category.destroy({
             where: {
                 id: req.query.id
             }
@@ -90,7 +85,7 @@ class UserController {
             if (result) {
                 res.send(new HttpException(200, 0, "删除成功", null));
             } else {
-                next(new HttpException(500, -1, "未找到用户"));
+                next(new HttpException(500, -1, "分类不存在"));
             }
         }).catch(error => {
             next(new HttpException(500, -1, error));
@@ -98,4 +93,4 @@ class UserController {
     }
 }
 
-export default UserController
+export default CategoryController

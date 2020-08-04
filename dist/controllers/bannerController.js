@@ -9,23 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const userEntity_1 = require("../models/userEntity");
 const HttpException_1 = require("../exceptions/HttpException");
-let UserController = (() => {
-    class UserController {
+const bannerEntity_1 = require("../models/bannerEntity");
+let BannerController = (() => {
+    class BannerController {
     }
-    UserController.listAll = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        userEntity_1.default.findAll().then(result => {
+    BannerController.getBannerList = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        bannerEntity_1.default.findAll().then(result => {
             res.send(new HttpException_1.default(200, 0, "调用成功", result));
         }).catch(error => {
             next(new HttpException_1.default(500, -1, error));
         });
     });
-    UserController.getOneById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    BannerController.getBannerById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         if (!req.query.id) {
-            return next(new HttpException_1.default(500, -1, "用户id不能为空！"));
+            return next(new HttpException_1.default(500, -1, "id不能为空！"));
         }
-        userEntity_1.default.findOne({
+        bannerEntity_1.default.findOne({
             where: {
                 id: req.query.id
             }
@@ -34,27 +34,24 @@ let UserController = (() => {
                 res.send(new HttpException_1.default(200, 0, "调用成功", result));
             }
             else {
-                next(new HttpException_1.default(500, -1, "用户不存在"));
+                next(new HttpException_1.default(500, -1, "banner不存在"));
             }
         }).catch(error => {
             next(new HttpException_1.default(500, -1, error));
         });
     });
-    UserController.createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        userEntity_1.default.create({
-            openid: req.query.openid,
-            status: 1
-        }).then(result => {
-            res.send(new HttpException_1.default(200, 0, "调用成功", result));
+    BannerController.createBanner = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        bannerEntity_1.default.create(req.query).then(result => {
+            res.send(new HttpException_1.default(200, 0, "新增成功", result));
         }).catch(error => {
             next(new HttpException_1.default(500, -1, error));
         });
     });
-    UserController.updateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    BannerController.updateBanner = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         if (!req.query.id) {
-            return next(new HttpException_1.default(500, -1, "用户id不能为空！"));
+            return next(new HttpException_1.default(500, -1, "id不能为空！"));
         }
-        userEntity_1.default.update(req.query, {
+        bannerEntity_1.default.update(req.query, {
             where: {
                 id: req.query.id
             }
@@ -63,17 +60,17 @@ let UserController = (() => {
                 res.send(new HttpException_1.default(200, 0, "修改成功", null));
             }
             else {
-                next(new HttpException_1.default(500, -1, "未找到用户"));
+                next(new HttpException_1.default(500, -1, "banner不存在"));
             }
         }).catch(error => {
             next(new HttpException_1.default(500, -1, error));
         });
     });
-    UserController.deleteUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    BannerController.deleteBanner = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         if (!req.query.id) {
-            return next(new HttpException_1.default(500, -1, "用户id不能为空！"));
+            return next(new HttpException_1.default(500, -1, "id不能为空！"));
         }
-        userEntity_1.default.destroy({
+        bannerEntity_1.default.destroy({
             where: {
                 id: req.query.id
             }
@@ -82,12 +79,12 @@ let UserController = (() => {
                 res.send(new HttpException_1.default(200, 0, "删除成功", null));
             }
             else {
-                next(new HttpException_1.default(500, -1, "未找到用户"));
+                next(new HttpException_1.default(500, -1, "banner不存在"));
             }
         }).catch(error => {
             next(new HttpException_1.default(500, -1, error));
         });
     });
-    return UserController;
+    return BannerController;
 })();
-exports.default = UserController;
+exports.default = BannerController;

@@ -7,10 +7,10 @@ router.route("/getUserList").get(UserController.listAll);
 
 router.route("/getUserById").get(UserController.getOneById);
 
-router.route("/createUser").post(UserController.newUser);
+router.route("/createUser").post(UserController.createUser);
 
-router.route("/updateUser").post(UserController.editUser);
+router.route("/updateUser").post(UserController.updateUser);
 
-router.route("/deleteUser").post(UserController.delUser);
+router.route("/deleteUser").post(UserController.deleteUser);
 
 export default router

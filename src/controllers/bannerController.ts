@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from "express";
-import User from "../models/userEntity"
 import HttpException from "../exceptions/HttpException";
+import Banner from "../models/bannerEntity"
 
-class UserController {
+class BannerController{
 
     /**
-     * 获取所有用户列表
+     * 获取所有轮播图列表
      */
-    static listAll = async (req: Request, res: Response, next: NextFunction) => {
-        User.findAll().then(result => {
+    static getBannerList = async (req: Request, res: Response, next: NextFunction) => {
+        Banner.findAll().then(result => {
             res.send(new HttpException(200, 0, "调用成功", result));
         }).catch(error => {
             next(new HttpException(500, -1, error));
@@ -16,13 +16,13 @@ class UserController {
     }
 
     /**
-     * 根据id获取用户详情
+     * 根据id获取轮播图
      */
-    static getOneById = async (req: Request, res: Response, next: NextFunction) => {
+    static getBannerById = async (req: Request, res: Response, next: NextFunction) => {
         if (!req.query.id) {
-            return next(new HttpException(500, -1, "用户id不能为空！"));
+            return next(new HttpException(500, -1, "id不能为空！"));
         }
-        User.findOne({
+        Banner.findOne({
             where: {
                 id: req.query.id
             }
@@ -30,36 +30,32 @@ class UserController {
             if (result) {
                 res.send(new HttpException(200, 0, "调用成功", result));
             } else {
-                next(new HttpException(500, -1, "用户不存在"));
+                next(new HttpException(500, -1, "banner不存在"));
             }
         }).catch(error => {
             next(new HttpException(500, -1, error));
-        })
+        });
     }
 
     /**
-     * 创建用户
+     * 新增轮播图
      */
-    static createUser = async (req: Request, res: Response, next: NextFunction) => {
-        User.create({
-            openid: req.query.openid,
-            status: 1
-        }).then(result => {
-            res.send(new HttpException(200, 0, "调用成功", result));
+    static createBanner = async (req: Request, res: Response, next: NextFunction) => {
+        Banner.create(req.query).then(result => {
+            res.send(new HttpException(200, 0, "新增成功", result));
         }).catch(error => {
             next(new HttpException(500, -1, error));
         })
     }
 
     /**
-     * 更新用户信息
-     * id required: true
+     * 更新轮播图
      */
-    static updateUser = async (req: Request, res: Response, next: NextFunction) => {
+    static updateBanner = async (req: Request, res: Response, next: NextFunction) => {
         if (!req.query.id) {
-            return next(new HttpException(500, -1, "用户id不能为空！"));
+            return next(new HttpException(500, -1, "id不能为空！"));
         }
-        User.update(req.query, {
+        Banner.update(req.query, {
             where: {
                 id: req.query.id
             }
@@ -67,7 +63,7 @@ class UserController {
             if (result[0]) {
                 res.send(new HttpException(200, 0, "修改成功", null));
             } else {
-                next(new HttpException(500, -1, "未找到用户"));
+                next(new HttpException(500, -1, "banner不存在"));
             }
         }).catch(error => {
             next(new HttpException(500, -1, error));
@@ -75,14 +71,13 @@ class UserController {
     }
 
     /**
-     * 删除用户
-     * id required: true
+     * 删除轮播图
      */
-    static deleteUser = async (req: Request, res: Response, next: NextFunction) => {
+    static deleteBanner = async (req: Request, res: Response, next: NextFunction) => {
         if (!req.query.id) {
-            return next(new HttpException(500, -1, "用户id不能为空！"));
+            return next(new HttpException(500, -1, "id不能为空！"));
         }
-        User.destroy({
+        Banner.destroy({
             where: {
                 id: req.query.id
             }
@@ -90,7 +85,7 @@ class UserController {
             if (result) {
                 res.send(new HttpException(200, 0, "删除成功", null));
             } else {
-                next(new HttpException(500, -1, "未找到用户"));
+                next(new HttpException(500, -1, "banner不存在"));
             }
         }).catch(error => {
             next(new HttpException(500, -1, error));
@@ -98,4 +93,4 @@ class UserController {
     }
 }
 
-export default UserController
+export default BannerController

@@ -17,18 +17,20 @@
   "author": "poldi",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.19.2",
     "bcrypt": "^4.0.1",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "errorhandler": "^1.5.1",
     "express": "^4.17.1",
-    "mysql": "^2.18.1",
     "method-override": "^3.0.0",
     "mongoose": "^5.9.16",
     "morgan": "^1.10.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.1.0",
     "pug": "^3.0.0",
-    "axios": "^0.19.2"
+    "sequelize": "^6.3.4"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
