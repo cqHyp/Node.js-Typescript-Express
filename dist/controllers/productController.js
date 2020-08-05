@@ -22,7 +22,9 @@ let ProductController = (() => {
         if (!req.query.pageCount) {
             return next(new HttpException_1.default(500, -1, "pageCount不能为空！"));
         }
+        let condition = req.query.category ? { category: req.query.category } : {};
         productEntity_1.default.findAndCountAll({
+            where: Object.assign({}, condition),
             limit: Number(req.query.pageCount),
             offset: Number(req.query.page) * Number(req.query.pageCount),
             include: [

@@ -8,16 +8,20 @@ const Banner = dbConfig_1.default.define('banner', {
         primaryKey: true
     },
     title: {
-        type: sequelize_1.DataTypes.STRING
+        type: sequelize_1.DataTypes.STRING,
+        comment: "标题"
     },
     imgUrl: {
-        type: sequelize_1.DataTypes.STRING
+        type: sequelize_1.DataTypes.STRING,
+        comment: "图片地址"
     },
     type: {
-        type: sequelize_1.DataTypes.SMALLINT
+        type: sequelize_1.DataTypes.SMALLINT,
+        comment: "类型 1：默认"
     },
     sortCode: {
-        type: sequelize_1.DataTypes.INTEGER
+        type: sequelize_1.DataTypes.INTEGER,
+        comment: "权重"
     },
 }, {
     freezeTableName: true

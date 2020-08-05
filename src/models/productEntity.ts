@@ -52,6 +52,11 @@ const Product = sequelize.define('product', {
             model: "category",
             key: "id"
         }
+    },
+
+    status: {
+        type: DataTypes.SMALLINT,
+        comment: "商品状态 0：已下架、1：已上架"
     }
 
 }, {

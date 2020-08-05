@@ -7,6 +7,7 @@ import errorMiddleware from "./middleware/error.middleware";
 import successMiddleware from "./middleware/success.middleware";
 import Product from "./models/productEntity";
 import Category from "./models/categoryEntity";
+import sequelize from "./sql/dbConfig"
 
 /**
  * The Server 
@@ -95,6 +96,7 @@ export class Server {
      * 表关联
      */
     public initSqlConfig() {
+        // sequelize.sync({force: true});
         Category.hasMany(Product, { as: "Category", foreignKey: "category", sourceKey: "id" });
         Product.belongsTo(Category, { as: "Category", foreignKey: "category", targetKey: "id" });
     }

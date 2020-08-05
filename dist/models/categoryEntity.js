@@ -8,13 +8,16 @@ const Category = dbConfig_1.default.define('category', {
         primaryKey: true
     },
     title: {
-        type: sequelize_1.DataTypes.STRING
+        type: sequelize_1.DataTypes.STRING,
+        comment: "分类标题"
     },
     desc: {
-        type: sequelize_1.DataTypes.STRING
+        type: sequelize_1.DataTypes.STRING,
+        comment: "分类简述"
     },
     sortCode: {
-        type: sequelize_1.DataTypes.INTEGER
+        type: sequelize_1.DataTypes.INTEGER,
+        comment: "权重"
     },
 }, {
     freezeTableName: true

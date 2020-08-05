@@ -8,5 +8,5 @@ exports.mysql_config = {
     password: "poldi",
     database: "hpnz"
 };
-exports.appId = "";
-exports.secret = "";
+exports.appId = "wx8927005ed85d8aa2";
+exports.secret = "68623e373ad118aefeb0681a44df7da7";

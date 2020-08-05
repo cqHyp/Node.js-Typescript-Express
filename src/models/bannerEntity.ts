@@ -8,19 +8,23 @@ const Banner = sequelize.define('banner', {
     },
 
     title: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        comment: "标题"
     },
 
     imgUrl: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        comment: "图片地址"
     },
 
     type: {
-        type: DataTypes.SMALLINT
+        type: DataTypes.SMALLINT,
+        comment: "类型 1：默认"
     },
 
     sortCode: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        comment: "权重"
     },
 
 }, {

@@ -16,5 +16,5 @@ export const mysql_config = {
     database: "hpnz"
 };
 
-export const appId = "";
-export const secret = "";
+export const appId = "wx8927005ed85d8aa2";
+export const secret = "68623e373ad118aefeb0681a44df7da7";

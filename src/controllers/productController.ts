@@ -18,11 +18,16 @@ class ProductController {
         if (!req.query.pageCount) {
             return next(new HttpException(500, -1, "pageCount不能为空！"));
         }
+        let condition = req.query.category ? { category: req.query.category } : {};
         Product.findAndCountAll({
+            where: {
+                ...condition,
+                  
+            },
             limit: Number(req.query.pageCount),
             offset: Number(req.query.page) * Number(req.query.pageCount),
             include: [
-                { model: Category, as: "Category"},
+                { model: Category, as: "Category" },
             ]
         }).then(result => {
             res.send(new HttpException(200, 0, "调用成功", result));

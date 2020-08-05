@@ -45,6 +45,10 @@ const Product = dbConfig_1.default.define('product', {
             model: "category",
             key: "id"
         }
+    },
+    status: {
+        type: sequelize_1.DataTypes.SMALLINT,
+        comment: "商品状态 0：已下架、1：已上架"
     }
 }, {
     freezeTableName: true

@@ -8,15 +8,18 @@ const Category = sequelize.define('category', {
     },
 
     title: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        comment: "分类标题"
     },
 
     desc: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        comment: "分类简述"
     },
 
     sortCode: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        comment: "权重"
     },
 
 }, {

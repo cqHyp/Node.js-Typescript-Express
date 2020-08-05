@@ -41,6 +41,7 @@
     "@types/method-override": "0.0.31",
     "@types/mongoose": "^5.7.21",
     "@types/morgan": "^1.9.0",
+    "@types/uuid": "8.0.1",
     "grunt": "^1.1.0",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-watch": "^1.1.0",
