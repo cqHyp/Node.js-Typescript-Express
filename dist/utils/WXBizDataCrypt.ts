@@ -1,6 +1,7 @@
-var crypto = require('crypto')
+// var crypto = require('crypto');
+import * as crypto from "crypto";
 
-function WXBizDataCrypt(appId, sessionKey) {
+function WXBizDataCrypt(appId:String, sessionKey:String) {
   this.appId = appId
   this.sessionKey = sessionKey
 }
@@ -16,7 +17,7 @@ WXBizDataCrypt.prototype.decryptData = function (encryptedData, iv) {
     var decipher = crypto.createDecipheriv('aes-128-cbc', sessionKey, iv)
     // 设置自动 padding 为 true，删除填充补位
     decipher.setAutoPadding(true)
-    var decoded = decipher.update(encryptedData, 'binary', 'utf8')
+    var decoded:any = decipher.update(encryptedData, 'binary', 'utf8')
     decoded += decipher.final('utf8')
     
     decoded = JSON.parse(decoded)
@@ -32,4 +33,4 @@ WXBizDataCrypt.prototype.decryptData = function (encryptedData, iv) {
   return decoded
 }
 
-module.exports = WXBizDataCrypt
+export default WXBizDataCrypt

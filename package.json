@@ -7,7 +7,8 @@
     "dev": "SET NODE_ENV=development nodemon ./bin/www",
     "grunt": "grunt",
     "start": "node ./bin/www",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "debugger": "node --inspect-brk=8081 index.js"
   },
   "keywords": [
     "typescript",

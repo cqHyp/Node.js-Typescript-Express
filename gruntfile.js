@@ -17,6 +17,12 @@ module.exports = function(grunt) {
               src: ["**"],
               dest: "./dist/views",
             },
+            {
+              expand: true,
+              cwd: './src/utils',
+              src: ["**"],
+              dest: "./dist/utils",
+            },
           ]
         }
       },
@@ -43,6 +49,10 @@ module.exports = function(grunt) {
         },
         views: {
           files: ["views/\*\*/\*.pug"],
+          tasks: ["copy"],
+        },
+        js: {
+          files: ["src/utils/\*\*/\*.js"],
           tasks: ["copy"],
         }
       }
