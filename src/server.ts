@@ -96,7 +96,7 @@ export class Server {
      * 表关联
      */
     public initSqlConfig() {
-        // sequelize.sync({force: true});
+        sequelize.sync({force: false});
         Category.hasMany(Product, { as: "Category", foreignKey: "category", sourceKey: "id" });
         Product.belongsTo(Category, { as: "Category", foreignKey: "category", targetKey: "id" });
     }

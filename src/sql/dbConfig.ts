@@ -23,18 +23,3 @@ sequelize.authenticate().then(() => {
     });
 
 export default sequelize;
-// exports.base = (sql: String, data: [], callback: (arg0: any) => void) => {
-    // const db = mysql.createConnection(mysql_config);
-
-    // db.connect((err: any) => {
-    //     if (err) throw err;
-    //     console.log("数据库连接成功");
-    // });
-
-    // db.query(sql, data, (error, results, fields) => {
-    //     if (error) throw error;
-    //     callback(results);
-    // });
-
-    // db.end();
-// }

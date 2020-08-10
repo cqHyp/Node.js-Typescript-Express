@@ -87,7 +87,7 @@ class AuthController extends baseController {
                 next(new HttpException(500, -1, "系统错误"));
             }
         }).catch(exce => {
-            next(new HttpException(500, -1, exce));
+            next(new HttpException(500, -10023, "token已过期"));
         })
     }
 }
