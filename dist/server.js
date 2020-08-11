@@ -10,6 +10,8 @@ const error_middleware_1 = require("./middleware/error.middleware");
 const success_middleware_1 = require("./middleware/success.middleware");
 const productEntity_1 = require("./models/productEntity");
 const categoryEntity_1 = require("./models/categoryEntity");
+const shopEntity_1 = require("./models/shopEntity");
+const adminEntity_1 = require("./models/adminEntity");
 class Server {
     constructor() {
         this.app = express();
@@ -37,6 +39,8 @@ class Server {
     initSqlConfig() {
         categoryEntity_1.default.hasMany(productEntity_1.default, { as: "Category", foreignKey: "category", sourceKey: "id" });
         productEntity_1.default.belongsTo(categoryEntity_1.default, { as: "Category", foreignKey: "category", targetKey: "id" });
+        shopEntity_1.default.hasMany(adminEntity_1.default, { as: "shop", foreignKey: "shopId", sourceKey: "id" });
+        adminEntity_1.default.belongsTo(shopEntity_1.default, { as: "shop", foreignKey: "shopId", targetKey: "id" });
     }
     initializeErrorHandling() {
         this.app.use(error_middleware_1.default);

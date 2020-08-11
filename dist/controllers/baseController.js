@@ -11,6 +11,9 @@ let BaseController = (() => {
             userEntity_1.default.findOne({
                 where: {
                     token: token
+                },
+                attributes: {
+                    exclude: ["password"]
                 }
             }).then(res => {
                 if (res) {

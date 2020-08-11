@@ -7,6 +7,9 @@ class BaseController {
             User.findOne({
                 where: {
                     token: token
+                },
+                attributes: {
+                    exclude: ["password"]
                 }
             }).then(res => {
                 if (res) {

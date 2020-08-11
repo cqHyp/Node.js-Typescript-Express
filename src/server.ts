@@ -8,6 +8,8 @@ import successMiddleware from "./middleware/success.middleware";
 import Product from "./models/productEntity";
 import Category from "./models/categoryEntity";
 import sequelize from "./sql/dbConfig"
+import Shop from "./models/shopEntity";
+import Admin from "./models/adminEntity";
 
 /**
  * The Server 
@@ -96,9 +98,12 @@ export class Server {
      * 表关联
      */
     public initSqlConfig() {
-        sequelize.sync({force: false});
+        // sequelize.sync({force: false});
+
         Category.hasMany(Product, { as: "Category", foreignKey: "category", sourceKey: "id" });
         Product.belongsTo(Category, { as: "Category", foreignKey: "category", targetKey: "id" });
+        Shop.hasMany(Admin, {as: "shop", foreignKey: "shopId", sourceKey: "id"});
+        Admin.belongsTo(Shop, {as: "shop", foreignKey: "shopId", targetKey: "id"});
     }
 
     public initializeErrorHandling() {

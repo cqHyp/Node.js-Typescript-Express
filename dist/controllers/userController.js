@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const userEntity_1 = require("../models/userEntity");
 const HttpException_1 = require("../exceptions/HttpException");
+const baseController_1 = require("./baseController");
 let UserController = (() => {
     class UserController {
     }
@@ -86,6 +87,14 @@ let UserController = (() => {
             }
         }).catch(error => {
             next(new HttpException_1.default(500, -1, error));
+        });
+    });
+    UserController.getUserInfo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        baseController_1.default.verifyToken(req.query.token).then(userData => {
+            res.send(new HttpException_1.default(200, 0, "调用成功", userData));
+        }).catch(exce => {
+            console.error(exce);
+            next(new HttpException_1.default(500, -10023, "token已过期"));
         });
     });
     return UserController;

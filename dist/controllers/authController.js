@@ -88,7 +88,7 @@ let AuthController = (() => {
                 next(new HttpException_1.default(500, -1, "系统错误"));
             }
         }).catch(exce => {
-            next(new HttpException_1.default(500, -1, exce));
+            next(new HttpException_1.default(500, -10023, "token已过期"));
         });
     });
     return AuthController;

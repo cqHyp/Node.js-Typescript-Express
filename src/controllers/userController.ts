@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import User from "../models/userEntity"
 import HttpException from "../exceptions/HttpException";
+import BaseController from "./baseController";
 
 class UserController {
 
@@ -94,6 +95,15 @@ class UserController {
             }
         }).catch(error => {
             next(new HttpException(500, -1, error));
+        })
+    }
+
+    static getUserInfo = async (req: Request, res: Response, next: NextFunction) => {
+        BaseController.verifyToken(req.query.token).then(userData => {
+            res.send(new HttpException(200, 0, "调用成功", userData));
+        }).catch(exce => {
+            console.error(exce);
+            next(new HttpException(500, -10023, "token已过期"));
         })
     }
 }

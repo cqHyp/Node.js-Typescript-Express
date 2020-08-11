@@ -8,4 +8,5 @@ router.route("/getUserById").get(userController_1.default.getOneById);
 router.route("/createUser").post(userController_1.default.createUser);
 router.route("/updateUser").post(userController_1.default.updateUser);
 router.route("/deleteUser").post(userController_1.default.deleteUser);
+router.route("/getUserInfo").get(userController_1.default.getUserInfo);
 exports.default = router;

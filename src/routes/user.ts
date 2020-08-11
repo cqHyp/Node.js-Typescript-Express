@@ -13,4 +13,6 @@ router.route("/updateUser").post(UserController.updateUser);
 
 router.route("/deleteUser").post(UserController.deleteUser);
 
+router.route("/getUserInfo").get(UserController.getUserInfo);
+
 export default router
