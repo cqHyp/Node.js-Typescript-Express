@@ -10,6 +10,7 @@ import Category from "./models/categoryEntity";
 import sequelize from "./sql/dbConfig"
 import Shop from "./models/shopEntity";
 import Admin from "./models/adminEntity";
+import * as rateLimit from "express-rate-limit";
 
 /**
  * The Server 
@@ -50,6 +51,8 @@ export class Server {
         // add api
         this.api();
 
+        this.initApiLimit();
+
         this.initSqlConfig();
 
         this.initializeErrorHandling();
@@ -65,6 +68,15 @@ export class Server {
      */
     public api() {
 
+    }
+
+    public initApiLimit() {
+        const smsLimiter = rateLimit({
+            windowMs: 5 * 60 * 1000,
+            max: 1,
+            message: "短信验证码已发送，五分钟后可重新获取"
+        });
+        this.app.use(smsLimiter);
     }
 
     /**
@@ -98,12 +110,12 @@ export class Server {
      * 表关联
      */
     public initSqlConfig() {
-        // sequelize.sync({force: false});
+        sequelize.sync({ force: false });
 
         Category.hasMany(Product, { as: "Category", foreignKey: "category", sourceKey: "id" });
         Product.belongsTo(Category, { as: "Category", foreignKey: "category", targetKey: "id" });
-        Shop.hasMany(Admin, {as: "shop", foreignKey: "shopId", sourceKey: "id"});
-        Admin.belongsTo(Shop, {as: "shop", foreignKey: "shopId", targetKey: "id"});
+        Shop.hasMany(Admin, { as: "shop", foreignKey: "shopId", sourceKey: "id" });
+        Admin.belongsTo(Shop, { as: "shop", foreignKey: "shopId", targetKey: "id" });
     }
 
     public initializeErrorHandling() {

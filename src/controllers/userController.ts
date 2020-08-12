@@ -98,6 +98,9 @@ class UserController {
         })
     }
 
+    /**
+     * 根据token获取用户信息
+     */
     static getUserInfo = async (req: Request, res: Response, next: NextFunction) => {
         BaseController.verifyToken(req.query.token).then(userData => {
             res.send(new HttpException(200, 0, "调用成功", userData));

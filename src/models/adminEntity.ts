@@ -33,6 +33,11 @@ const Admin = sequelize.define("admin", {
             key: "id"
         },
         comment: "门店id"
+    },
+
+    token: {
+        type: DataTypes.STRING,
+        comment: "登录验证信息"
     }
 }, {
     freezeTableName: true

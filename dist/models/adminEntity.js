@@ -29,6 +29,10 @@ const Admin = dbConfig_1.default.define("admin", {
             key: "id"
         },
         comment: "门店id"
+    },
+    token: {
+        type: sequelize_1.DataTypes.STRING,
+        comment: "登录验证信息"
     }
 }, {
     freezeTableName: true
