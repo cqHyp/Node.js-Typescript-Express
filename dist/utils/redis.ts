@@ -35,8 +35,3 @@ export async function getItem(key: string) {
         })
     })
 }
-// module.exports = {
-//     redisClient,
-//     setItem,
-//     getItem
-// };

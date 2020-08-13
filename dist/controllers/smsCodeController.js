@@ -57,6 +57,37 @@ let SMSCodeController = (() => {
             });
         });
     };
+    SMSCodeController.checkSMSCorrect = (code, mobile) => {
+        return new Promise((resolve, reject) => {
+            SMSCodeEntity_1.default.findOne({
+                where: {
+                    mobile: mobile
+                },
+                order: [['createdAt', 'desc']]
+            }).then(smsResult => {
+                if (smsResult) {
+                    let codeCreateAt = smsResult.get("createdAt");
+                    let exTime = new Date(new Date().getTime() - 5 * 60 * 1000);
+                    if (codeCreateAt > exTime) {
+                        if (smsResult.get("code") == code) {
+                            resolve();
+                        }
+                        else {
+                            reject(new HttpException_1.default(200, -1, "验证码不正确"));
+                        }
+                    }
+                    else {
+                        reject(new HttpException_1.default(200, -1, "验证码已过期，请重新获取"));
+                    }
+                }
+                else {
+                    reject(new HttpException_1.default(200, -1, "请先获取验证码"));
+                }
+            }).catch(error => {
+                reject(new HttpException_1.default(500, -1, error));
+            });
+        });
+    };
     return SMSCodeController;
 })();
 exports.default = SMSCodeController;
