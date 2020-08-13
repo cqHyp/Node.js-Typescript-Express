@@ -94,7 +94,7 @@ class AdminController {
      * 管理员注册
      */
     static adminRegister = async (req: Request, res: Response, next: NextFunction) => {
-
+        
     }
 }
 

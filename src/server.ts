@@ -10,7 +10,8 @@ import Category from "./models/categoryEntity";
 import sequelize from "./sql/dbConfig"
 import Shop from "./models/shopEntity";
 import Admin from "./models/adminEntity";
-import * as rateLimit from "express-rate-limit";
+import HttpException from "../dist/exceptions/HttpException";
+import { redisClient } from "./utils/redis";
 
 /**
  * The Server 
@@ -45,13 +46,13 @@ export class Server {
         // configure application
         this.config();
 
+        this.initIntercept();
+
         // add routes
         this.routes();
 
         // add api
         this.api();
-
-        this.initApiLimit();
 
         this.initSqlConfig();
 
@@ -70,13 +71,24 @@ export class Server {
 
     }
 
-    public initApiLimit() {
-        const smsLimiter = rateLimit({
-            windowMs: 5 * 60 * 1000,
-            max: 1,
-            message: "短信验证码已发送，五分钟后可重新获取"
+    public initIntercept() {
+        // api拦截器
+        this.app.all("/*", function (req, res, next) {
+            let key = req.ip + "_" + req.url;
+            redisClient.get(key, (err, val) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    if (!val) {
+                        redisClient.set(key, JSON.stringify({body: req.body, query: req.query}));
+                        redisClient.expire(key, 1);
+                        next();
+                    } else {
+                        next(new HttpException(500, -1, "请求太频繁，请稍后再试"));
+                    }
+                }
+            })
         });
-        this.app.use(smsLimiter);
     }
 
     /**

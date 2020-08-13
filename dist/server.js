@@ -13,14 +13,15 @@ const categoryEntity_1 = require("./models/categoryEntity");
 const dbConfig_1 = require("./sql/dbConfig");
 const shopEntity_1 = require("./models/shopEntity");
 const adminEntity_1 = require("./models/adminEntity");
-const rateLimit = require("express-rate-limit");
+const HttpException_1 = require("../dist/exceptions/HttpException");
+const redis_1 = require("./utils/redis");
 class Server {
     constructor() {
         this.app = express();
         this.config();
+        this.initIntercept();
         this.routes();
         this.api();
-        this.initApiLimit();
         this.initSqlConfig();
         this.initializeErrorHandling();
         this.initializeSuccessHandling();
@@ -30,13 +31,25 @@ class Server {
     }
     api() {
     }
-    initApiLimit() {
-        const smsLimiter = rateLimit({
-            windowMs: 5 * 60 * 1000,
-            max: 1,
-            message: "短信验证码已发送，五分钟后可重新获取"
+    initIntercept() {
+        this.app.all("/*", function (req, res, next) {
+            let key = req.ip + "_" + req.url;
+            redis_1.redisClient.get(key, (err, val) => {
+                if (err) {
+                    console.log(err);
+                }
+                else {
+                    if (!val) {
+                        redis_1.redisClient.set(key, JSON.stringify({ body: req.body, query: req.query }));
+                        redis_1.redisClient.expire(key, 1);
+                        next();
+                    }
+                    else {
+                        next(new HttpException_1.default(500, -1, "请求太频繁，请稍后再试"));
+                    }
+                }
+            });
         });
-        this.app.use(smsLimiter);
     }
     config() {
         this.app.use(cors());
