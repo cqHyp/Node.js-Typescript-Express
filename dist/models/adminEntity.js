@@ -18,6 +18,10 @@ const Admin = dbConfig_1.default.define("admin", {
         unique: true,
         comment: "手机号"
     },
+    avatar: {
+        type: sequelize_1.DataTypes.STRING,
+        comment: "头像"
+    },
     password: {
         type: sequelize_1.DataTypes.STRING,
         comment: "密码"

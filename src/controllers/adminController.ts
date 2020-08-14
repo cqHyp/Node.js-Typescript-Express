@@ -28,7 +28,7 @@ class AdminController {
             }
         }).then(result => {
             if (result) {
-                res.send(new HttpException(200, 0, result.get("token")));
+                res.send(new HttpException(200, 0, "登录成功", result.get("token")));
             } else {
                 res.send(new HttpException(200, -1, "账号密码不正确"));
             }
@@ -42,10 +42,10 @@ class AdminController {
      */
     static adminLoginBySMS = async (req: Request, res: Response, next: NextFunction) => {
         if (!req.body.account) {
-            return next(new HttpException(500, -1, "请输入手机号"));
+            return next(new HttpException(200, -1, "请输入手机号"));
         }
         if (!req.body.code) {
-            return next(new HttpException(500, -1, "请输入验证码"));
+            return next(new HttpException(200, -1, "请输入验证码"));
         }
         Admin.findOne({
             where: {
@@ -98,13 +98,16 @@ class AdminController {
 
     /**
      * 管理员注册
+     * @param (mobile 手机号 String)
+     * @param (code 验证码 String)
+     * @returns token
      */
     static adminRegister = async (req: Request, res: Response, next: NextFunction) => {
         if(!req.body.mobile) {
-            return next(new HttpException(500, -1, "请输入手机号"));
+            return next(new HttpException(200, -1, "请输入手机号"));
         }
         if (!req.body.code) {
-            return next(new HttpException(500, -1, "请输入验证码"));
+            return next(new HttpException(200, -1, "请输入验证码"));
         }
         Admin.findOne({
             where: {
@@ -116,14 +119,41 @@ class AdminController {
                     Admin.upsert({
                         account: req.body.mobile,
                         mobile: req.body.mobile,
-                        password: crypto.createHash("md5").update("123456").digest("hex")
+                        password: crypto.createHash("md5").update("12345678").digest("hex"),
+                        token: uuidv4()
+                    }).then(upsertResult => {
+                        res.send(new HttpException(200, 0, "注册成功", upsertResult[0].get("token")));
+                    }).catch(error => {
+                        next(new HttpException(500, -1, error));
                     })
                 }).catch((err: any) => {
                     next(err);
                 })
             } else {
                 // 手机号已被注册
-                next(new HttpException(500, -1, "手机号已被注册"));
+                next(new HttpException(200, -1, "手机号已被注册"));
+            }
+        }).catch(error => {
+            next(new HttpException(500, -1, error));
+        })
+    }
+
+    /**
+     * 获取管理员信息
+     */
+    static getAdminUserInfo = async (req: Request, res: Response, next: NextFunction) => {
+        Admin.findOne({
+            where: {
+                token: req.query.token
+            },
+            attributes: {
+                exclude: ["password"]
+            }
+        }).then(result => {
+            if(result) {
+                res.send(new HttpException(200, 0, "获取成功", result));
+            }else {
+                next(new HttpException(200, -1, "token无效"));
             }
         }).catch(error => {
             next(new HttpException(500, -1, error));

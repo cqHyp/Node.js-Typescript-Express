@@ -9,4 +9,6 @@ router.route("/loginBySMS").post(AdminController.adminLoginBySMS);
 
 router.route("/register").post(AdminController.adminRegister);
 
+router.route("/getUserInfo").get(AdminController.getAdminUserInfo);
+
 export default router

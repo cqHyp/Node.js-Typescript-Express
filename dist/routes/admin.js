@@ -6,4 +6,5 @@ const router = express_1.Router();
 router.route("/login").post(adminController_1.default.adminLogin);
 router.route("/loginBySMS").post(adminController_1.default.adminLoginBySMS);
 router.route("/register").post(adminController_1.default.adminRegister);
+router.route("/getUserInfo").get(adminController_1.default.getAdminUserInfo);
 exports.default = router;

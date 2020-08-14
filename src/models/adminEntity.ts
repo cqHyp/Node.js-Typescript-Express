@@ -21,6 +21,11 @@ const Admin = sequelize.define("admin", {
         comment: "手机号"
     },
 
+    avatar: {
+        type: DataTypes.STRING,
+        comment: "头像"
+    },
+
     password: {
         type: DataTypes.STRING,
         comment: "密码"

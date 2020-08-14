@@ -35,7 +35,7 @@ let AdminController = (() => {
             }
         }).then(result => {
             if (result) {
-                res.send(new HttpException_1.default(200, 0, result.get("token")));
+                res.send(new HttpException_1.default(200, 0, "登录成功", result.get("token")));
             }
             else {
                 res.send(new HttpException_1.default(200, -1, "账号密码不正确"));
@@ -46,10 +46,10 @@ let AdminController = (() => {
     });
     AdminController.adminLoginBySMS = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         if (!req.body.account) {
-            return next(new HttpException_1.default(500, -1, "请输入手机号"));
+            return next(new HttpException_1.default(200, -1, "请输入手机号"));
         }
         if (!req.body.code) {
-            return next(new HttpException_1.default(500, -1, "请输入验证码"));
+            return next(new HttpException_1.default(200, -1, "请输入验证码"));
         }
         adminEntity_1.default.findOne({
             where: {
@@ -103,10 +103,10 @@ let AdminController = (() => {
     });
     AdminController.adminRegister = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         if (!req.body.mobile) {
-            return next(new HttpException_1.default(500, -1, "请输入手机号"));
+            return next(new HttpException_1.default(200, -1, "请输入手机号"));
         }
         if (!req.body.code) {
-            return next(new HttpException_1.default(500, -1, "请输入验证码"));
+            return next(new HttpException_1.default(200, -1, "请输入验证码"));
         }
         adminEntity_1.default.findOne({
             where: {
@@ -118,14 +118,38 @@ let AdminController = (() => {
                     adminEntity_1.default.upsert({
                         account: req.body.mobile,
                         mobile: req.body.mobile,
-                        password: crypto.createHash("md5").update("123456").digest("hex")
+                        password: crypto.createHash("md5").update("12345678").digest("hex"),
+                        token: uuid_1.v4()
+                    }).then(upsertResult => {
+                        res.send(new HttpException_1.default(200, 0, "注册成功", upsertResult[0].get("token")));
+                    }).catch(error => {
+                        next(new HttpException_1.default(500, -1, error));
                     });
                 }).catch((err) => {
                     next(err);
                 });
             }
             else {
-                next(new HttpException_1.default(500, -1, "手机号已被注册"));
+                next(new HttpException_1.default(200, -1, "手机号已被注册"));
+            }
+        }).catch(error => {
+            next(new HttpException_1.default(500, -1, error));
+        });
+    });
+    AdminController.getAdminUserInfo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        adminEntity_1.default.findOne({
+            where: {
+                token: req.query.token
+            },
+            attributes: {
+                exclude: ["password"]
+            }
+        }).then(result => {
+            if (result) {
+                res.send(new HttpException_1.default(200, 0, "获取成功", result));
+            }
+            else {
+                next(new HttpException_1.default(200, -1, "token无效"));
             }
         }).catch(error => {
             next(new HttpException_1.default(500, -1, error));
