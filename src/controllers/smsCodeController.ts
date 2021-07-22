@@ -27,6 +27,24 @@ class SMSCodeController {
         })
     }
 
+    static getSMSCode = async (req: Request, res: Response, next: NextFunction) => {
+        if (!req.body.mobile) {
+            return next(new HttpException(500, -1, "请输入手机号"));
+        }
+        SMSCode.findOne({
+            where: {
+                mobile: req.body.mobile
+            },
+            order: [['createdAt', 'desc']]
+        }).then(smsResult => {
+            if(smsResult) {
+                res.send(new HttpException(200, 0, "登录成功", smsResult));
+            }else {
+                next(new HttpException(500, -1, "系统错误"));
+            }
+        })
+    }
+
     /**
      * checkSendMany
      */
@@ -39,12 +57,12 @@ class SMSCodeController {
                     if (!val) {
                         redisClient.set(key, mobile);
                         redisClient.expire(key, 60);
-                        resolve();
+                        resolve("success");
                     } else {
                         if (val == mobile) {
                             reject(new HttpException(500, -1, "验证码已发送，请一分钟后重试"));
                         } else {
-                            resolve();
+                            resolve("success");
                         }
                     }
                 }
@@ -65,7 +83,7 @@ class SMSCodeController {
                     let exTime = new Date(new Date().getTime() - 5 * 60 * 1000);
                     if (codeCreateAt > exTime) {
                         if (smsResult.get("code") == code){
-                            resolve();
+                            resolve(code);
                         }else {
                             reject(new HttpException(200, -1, "验证码不正确"))
                         }

@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.secret = exports.appId = exports.redis_config = exports.mysql_config = exports.DB_URL = void 0;
-exports.DB_URL = 'mongodb://localhost:27017/express-api';
+exports.secret = exports.appId = exports.redis_config = exports.mysql_config = void 0;
 exports.mysql_config = {
     host: "112.74.198.15",
     user: "root",

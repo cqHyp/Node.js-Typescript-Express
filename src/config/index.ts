@@ -1,5 +1,3 @@
-export const DB_URL = 'mongodb://localhost:27017/express-api';
-
 // 本地
 // export const mysql_config = {
 //     host: "localhost",

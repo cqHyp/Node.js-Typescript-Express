@@ -5,30 +5,31 @@ import HttpException from "../exceptions/HttpException";
 import * as crypto from "crypto";
 import { v4 as uuidv4 } from "uuid";
 import SMSCodeController from "./smsCodeController";
+import tUser from "../models/tuserEntity";
 
 class AdminController {
 
     /**
-     * 管理员账号密码登录
+     * 测试账号密码登录
      */
-    static adminLogin = async (req: Request, res: Response, next: NextFunction) => {
+     static adminLogin = async (req: Request, res: Response, next: NextFunction) => {
         if (!req.body.account) {
             return next(new HttpException(500, -1, "请输入账号"));
         }
         if (!req.body.password) {
             return next(new HttpException(500, -1, "请输入密码"));
         }
-        Admin.findOne({
+        tUser.findOne({
             where: {
-                mobile: req.body.account,
-                password: crypto.createHash("md5").update(req.body.password).digest("hex")
+                user_name: req.body.account,
+                password: req.body.password
             },
             attributes: {
                 exclude: ["password"]
             }
         }).then(result => {
             if (result) {
-                res.send(new HttpException(200, 0, "登录成功", result.get("token")));
+                res.send(new HttpException(200, 0, "登录成功", result.get("user_id")));
             } else {
                 res.send(new HttpException(200, -1, "账号密码不正确"));
             }
@@ -36,6 +37,35 @@ class AdminController {
             next(new HttpException(500, -1, error));
         })
     }
+
+    /**
+     * 管理员账号密码登录
+     */
+    // static adminLogin = async (req: Request, res: Response, next: NextFunction) => {
+    //     if (!req.body.account) {
+    //         return next(new HttpException(500, -1, "请输入账号"));
+    //     }
+    //     if (!req.body.password) {
+    //         return next(new HttpException(500, -1, "请输入密码"));
+    //     }
+    //     Admin.findOne({
+    //         where: {
+    //             mobile: req.body.account,
+    //             password: crypto.createHash("md5").update(req.body.password).digest("hex")
+    //         },
+    //         attributes: {
+    //             exclude: ["password"]
+    //         }
+    //     }).then(result => {
+    //         if (result) {
+    //             res.send(new HttpException(200, 0, "登录成功", result.get("token")));
+    //         } else {
+    //             res.send(new HttpException(200, -1, "账号密码不正确"));
+    //         }
+    //     }).catch(error => {
+    //         next(new HttpException(500, -1, error));
+    //     })
+    // }
 
     /**
      * 管理员验证码登录
@@ -138,13 +168,35 @@ class AdminController {
         })
     }
 
-    /**
+    // /**
+    //  * 获取管理员信息
+    //  */
+    // static getAdminUserInfo = async (req: Request, res: Response, next: NextFunction) => {
+    //     Admin.findOne({
+    //         where: {
+    //             token: req.query.token
+    //         },
+    //         attributes: {
+    //             exclude: ["password"]
+    //         }
+    //     }).then(result => {
+    //         if(result) {
+    //             res.send(new HttpException(200, 0, "获取成功", result));
+    //         }else {
+    //             next(new HttpException(200, -1, "token无效"));
+    //         }
+    //     }).catch(error => {
+    //         next(new HttpException(500, -1, error));
+    //     })
+    // }
+
+     /**
      * 获取管理员信息
      */
-    static getAdminUserInfo = async (req: Request, res: Response, next: NextFunction) => {
-        Admin.findOne({
+      static getAdminUserInfo = async (req: Request, res: Response, next: NextFunction) => {
+        tUser.findOne({
             where: {
-                token: req.query.token
+                user_id: req.query.token
             },
             attributes: {
                 exclude: ["password"]

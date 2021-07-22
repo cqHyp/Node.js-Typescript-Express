@@ -10,7 +10,6 @@ const error_middleware_1 = require("./middleware/error.middleware");
 const success_middleware_1 = require("./middleware/success.middleware");
 const productEntity_1 = require("./models/productEntity");
 const categoryEntity_1 = require("./models/categoryEntity");
-const dbConfig_1 = require("./sql/dbConfig");
 const shopEntity_1 = require("./models/shopEntity");
 const adminEntity_1 = require("./models/adminEntity");
 const HttpException_1 = require("../dist/exceptions/HttpException");
@@ -41,7 +40,7 @@ class Server {
                 else {
                     if (!val) {
                         redis_1.redisClient.set(key, JSON.stringify({ body: req.body, query: req.query }));
-                        redis_1.redisClient.expire(key, 1);
+                        redis_1.redisClient.pexpire(key, 100);
                         next();
                     }
                     else {
@@ -61,7 +60,6 @@ class Server {
         this.app.use(index_1.default);
     }
     initSqlConfig() {
-        dbConfig_1.default.sync({ force: false });
         categoryEntity_1.default.hasMany(productEntity_1.default, { as: "Category", foreignKey: "category", sourceKey: "id" });
         productEntity_1.default.belongsTo(categoryEntity_1.default, { as: "Category", foreignKey: "category", targetKey: "id" });
         shopEntity_1.default.hasMany(adminEntity_1.default, { as: "shop", foreignKey: "shopId", sourceKey: "id" });

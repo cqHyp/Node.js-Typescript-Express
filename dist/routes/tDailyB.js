@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const tdailybController_1 = require("../controllers/tdailybController");
+const router = express_1.Router();
+router.route("/getDailyBList").get(tdailybController_1.default.listAll);
+router.route("/getDailyBById").get(tdailybController_1.default.getOneById);
+router.route("/createDailyB").post(tdailybController_1.default.createDailyB);
+router.route("/updateDailyB").post(tdailybController_1.default.updateDailyB);
+router.route("/deleteDailyB").post(tdailybController_1.default.deleteDailyB);
+exports.default = router;

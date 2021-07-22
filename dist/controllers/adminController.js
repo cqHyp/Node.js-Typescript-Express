@@ -15,6 +15,7 @@ const HttpException_1 = require("../exceptions/HttpException");
 const crypto = require("crypto");
 const uuid_1 = require("uuid");
 const smsCodeController_1 = require("./smsCodeController");
+const tuserEntity_1 = require("../models/tuserEntity");
 let AdminController = (() => {
     class AdminController {
     }
@@ -25,17 +26,17 @@ let AdminController = (() => {
         if (!req.body.password) {
             return next(new HttpException_1.default(500, -1, "请输入密码"));
         }
-        adminEntity_1.default.findOne({
+        tuserEntity_1.default.findOne({
             where: {
-                mobile: req.body.account,
-                password: crypto.createHash("md5").update(req.body.password).digest("hex")
+                user_name: req.body.account,
+                password: req.body.password
             },
             attributes: {
                 exclude: ["password"]
             }
         }).then(result => {
             if (result) {
-                res.send(new HttpException_1.default(200, 0, "登录成功", result.get("token")));
+                res.send(new HttpException_1.default(200, 0, "登录成功", result.get("user_id")));
             }
             else {
                 res.send(new HttpException_1.default(200, -1, "账号密码不正确"));
@@ -137,9 +138,9 @@ let AdminController = (() => {
         });
     });
     AdminController.getAdminUserInfo = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        adminEntity_1.default.findOne({
+        tuserEntity_1.default.findOne({
             where: {
-                token: req.query.token
+                user_id: req.query.token
             },
             attributes: {
                 exclude: ["password"]

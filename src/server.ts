@@ -81,7 +81,7 @@ export class Server {
                 } else {
                     if (!val) {
                         redisClient.set(key, JSON.stringify({body: req.body, query: req.query}));
-                        redisClient.expire(key, 1);
+                        redisClient.pexpire(key, 100);
                         next();
                     } else {
                         next(new HttpException(500, -1, "请求太频繁，请稍后再试"));
@@ -122,7 +122,7 @@ export class Server {
      * 表关联
      */
     public initSqlConfig() {
-        sequelize.sync({ force: false });
+        // sequelize.sync({ force: true });
 
         Category.hasMany(Product, { as: "Category", foreignKey: "category", sourceKey: "id" });
         Product.belongsTo(Category, { as: "Category", foreignKey: "category", targetKey: "id" });

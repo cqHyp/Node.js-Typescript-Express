@@ -33,6 +33,24 @@ let SMSCodeController = (() => {
             next(err);
         });
     });
+    SMSCodeController.getSMSCode = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        if (!req.body.mobile) {
+            return next(new HttpException_1.default(500, -1, "请输入手机号"));
+        }
+        SMSCodeEntity_1.default.findOne({
+            where: {
+                mobile: req.body.mobile
+            },
+            order: [['createdAt', 'desc']]
+        }).then(smsResult => {
+            if (smsResult) {
+                res.send(new HttpException_1.default(200, 0, "登录成功", smsResult));
+            }
+            else {
+                next(new HttpException_1.default(500, -1, "系统错误"));
+            }
+        });
+    });
     SMSCodeController.checkSMS = (key, mobile) => {
         return new Promise((resolve, reject) => {
             redis_1.redisClient.get(key, (err, val) => {
@@ -43,14 +61,14 @@ let SMSCodeController = (() => {
                     if (!val) {
                         redis_1.redisClient.set(key, mobile);
                         redis_1.redisClient.expire(key, 60);
-                        resolve();
+                        resolve("success");
                     }
                     else {
                         if (val == mobile) {
                             reject(new HttpException_1.default(500, -1, "验证码已发送，请一分钟后重试"));
                         }
                         else {
-                            resolve();
+                            resolve("success");
                         }
                     }
                 }
@@ -70,7 +88,7 @@ let SMSCodeController = (() => {
                     let exTime = new Date(new Date().getTime() - 5 * 60 * 1000);
                     if (codeCreateAt > exTime) {
                         if (smsResult.get("code") == code) {
-                            resolve();
+                            resolve(code);
                         }
                         else {
                             reject(new HttpException_1.default(200, -1, "验证码不正确"));

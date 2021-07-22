@@ -1,16 +1,15 @@
 import { Request, Response, NextFunction } from "express";
-import User from "../models/userEntity";
+import tUser from "../models/tuserEntity"
 import HttpException from "../exceptions/HttpException";
 import BaseController from "./baseController";
-import tUser from "../models/tuserEntity";
 
-class UserController {
+class TUserController {
 
     /**
      * 获取所有用户列表
      */
     static listAll = async (req: Request, res: Response, next: NextFunction) => {
-        User.findAll().then(result => {
+        tUser.findAll().then(result => {
             res.send(new HttpException(200, 0, "调用成功", result));
         }).catch(error => {
             next(new HttpException(500, -1, error));
@@ -24,9 +23,9 @@ class UserController {
         if (!req.query.id) {
             return next(new HttpException(500, -1, "用户id不能为空！"));
         }
-        User.findOne({
+        tUser.findOne({
             where: {
-                id: req.query.id
+                user_id: req.query.id
             }
         }).then(result => {
             if (result) {
@@ -43,9 +42,11 @@ class UserController {
      * 创建用户
      */
     static createUser = async (req: Request, res: Response, next: NextFunction) => {
-        User.create({
-            openid: req.query.openid,
-            status: 1
+        tUser.create({
+            user_name: req.query.user_name,
+            indate: req.query.indate,
+            isactive: 1,
+            memo: req.query.memo
         }).then(result => {
             res.send(new HttpException(200, 0, "调用成功", result));
         }).catch(error => {
@@ -61,9 +62,9 @@ class UserController {
         if (!req.query.id) {
             return next(new HttpException(500, -1, "用户id不能为空！"));
         }
-        User.update(req.query, {
+        tUser.update(req.query, {
             where: {
-                id: req.query.id
+                user_id: req.query.id
             }
         }).then((result: any) => {
             if (result[0]) {
@@ -84,9 +85,9 @@ class UserController {
         if (!req.query.id) {
             return next(new HttpException(500, -1, "用户id不能为空！"));
         }
-        User.destroy({
+        tUser.destroy({
             where: {
-                id: req.query.id
+                user_id: req.query.id
             }
         }).then(result => {
             if (result) {
@@ -98,18 +99,6 @@ class UserController {
             next(new HttpException(500, -1, error));
         })
     }
-
-    /**
-     * 根据token获取用户信息
-     */
-    static getUserInfo = async (req: Request, res: Response, next: NextFunction) => {
-        BaseController.verifyToken(req.query.token).then(userData => {
-            res.send(new HttpException(200, 0, "调用成功", userData));
-        }).catch(exce => {
-            console.error(exce);
-            next(new HttpException(500, -10023, "token已过期"));
-        })
-    }
 }
 
-export default UserController
+export default TUserController
