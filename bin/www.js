@@ -5,7 +5,7 @@ const server = require("../dist/server");
 const debug = require("debug")("express:server");
 const http = require("http");
  
-const httpPort = normalizePort(process.env.Port || 8081);
+const httpPort = normalizePort(process.env.Port || 8093);
 const app = server.Server.bootstrap().app;
 app.set("port", httpPort);
 const httpServer = http.createServer(app);
