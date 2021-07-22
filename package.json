@@ -7,6 +7,7 @@
     "dev": "SET NODE_ENV=development nodemon ./bin/www",
     "grunt": "grunt",
     "start": "node ./bin/www",
+    "prd": "pm2 start ./bin/www",
     "test": "echo \"Error: no test specified\" && exit 1",
     "debugger": "node --inspect-brk=8081 index.js"
   },
