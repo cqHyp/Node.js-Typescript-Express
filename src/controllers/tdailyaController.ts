@@ -20,8 +20,8 @@ class TUserController {
             where: {
                 user_id: req.query.uid,
                 report_date: {
-                    $lt: endDate,
-                    $gt: startDate
+                    $lte: endDate,
+                    $gte: startDate
                 }
             }
         }).then(result => {

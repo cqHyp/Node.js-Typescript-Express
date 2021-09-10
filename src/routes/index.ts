@@ -10,6 +10,9 @@ import screw from "./screw";
 import tUser from "./tuser";
 import tDailyA from "./tDailyA";
 import tDailyB from "./tDailyB";
+import tIteration from "./tIteration";
+import common from "./common"
+import testReport from "./testReport"
 
 const routes = Router();
 
@@ -25,5 +28,9 @@ routes.use("/screw", screw);
 routes.use("/tuser", tUser);
 routes.use("/tDailyA", tDailyA);
 routes.use("/tDailyB", tDailyB);
+routes.use("/tIteration", tIteration);
+
+routes.use("/common", common);
+routes.use("/testReport", testReport);
 
 export default routes;
